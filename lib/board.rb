@@ -62,13 +62,13 @@ attr_accessor :grid
   def full?
     # when the board is full returns true
     # when theboard is not full returns false
-    @grid.flatten.all? { |el| el == :s }
+    @grid.flatten.all? { |el| el != nil }
   end
 
   def won?
   # when no ships remain returns true
   # when at least one ship remains returns false
-    self.count < 1
+    self.count == 0
   end
     
 end
