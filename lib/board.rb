@@ -40,7 +40,7 @@ attr_accessor :grid
   
   def count
     # returns the number of ships on the board
-    @grid.flatten.count(:s)
+    @grid.flatten.count(!nil)
   end
 
   def empty?(pos=nil)
@@ -68,7 +68,7 @@ attr_accessor :grid
   def won?
   # when no ships remain returns true
   # when at least one ship remains returns false
-    self.count == 0
+    @grid.flatten.all? { |el| el == :x || el == nil}
   end
     
 end

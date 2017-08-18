@@ -1,69 +1,64 @@
 require_relative 'board'
+require_relative 'ship'
 
 class HumanPlayer
     
-attr_accessor :board, :display, :name
+attr_accessor :board, :display, :name, :placements
 
   def initialize(name)
     @name = name
     @board = Board.new
     @display = Board.new
+    @ships = Ships.new
     @attacks = []
     @placements = []
   end
 
   def setup
-    ships = 3
-    until ships == 0
-      puts "You have #{ships} ships remaining to place..."
-      place_ship
-      ships -= 1
-      @board.grid.each {|row| p row}
-    end
-
+    place_ships
   end 
 
-  def get_placement
-
+  def get_placement(type, ship)
     placement = "invalid"
-    until valid?(placement) && !@placements.include?(placement)
-      puts "Where would you like to place a ship?"
+    direction = "wrong"
+    until valid?(placement) && @ships.valid_direction?(placement, direction, ship, @board)
+      puts "Where would you like to place the #{type}?"
       placement = parse($stdin.gets.chomp)
+      puts "Which direction? (up,down,left,or right)"
+      direction = $stdin.gets.chomp
     end 
 
     @placements << placement
-    placement 
-
+    @ships.place_ship(placement, direction, ship, @board) 
   end
-
+    
+  def render
+    @display.grid.each {|row| p row}
+  end
+    
   def parse(input)
     input.split(",").map {|ch| ch.to_i}
   end 
   
-  def place_ship
-
-    pos = get_placement
-    @board[pos] = :s
-  
+  def place_ships
+    @ships.ships.each do |type, pieces|
+      until pieces.length == 0
+        get_placement(type, pieces.pop)
+      end
+    end
+    
+    puts "All ships have been placed..."
   end
-
-  def render
-    @display.grid.each {|row| p row}
-  end
-
     
   def valid?(input)
-
-    return false if input.length != 2 
-    input.each do |digit|
-      return false unless (0..9).include?(digit.to_i)
-    end
+    return false if input.length != 2
+      
+    input.each {|digit| return false unless (0..9).include?(digit.to_i)}
+    
     true
   end
 
-
   def get_play
-    
     play = "invalid"
     until valid?(play) 
       puts "Which position would you like to fire upon?"
@@ -73,5 +68,5 @@ attr_accessor :board, :display, :name
       play
   end
 
-    
 end
+

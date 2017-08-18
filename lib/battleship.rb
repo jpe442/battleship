@@ -26,7 +26,7 @@ class BattleshipGame
   end
     
   def attack(pos)
-    if @board[pos] == :s
+    if @board[pos] != nil
       puts "#{pos} was a hit"
       @current_player.display[pos] = :X 
     else
@@ -56,7 +56,7 @@ class BattleshipGame
       switch_players
     end
 
-    puts "congrats #{@other_player.name} destroyed all the battleships"
+    puts "congrats #{@other_player.name}, you have destroyed all the #{@current_players} battleships!"
   
   end 
     
