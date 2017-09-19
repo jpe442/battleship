@@ -75,7 +75,7 @@ attr_accessor :ships
       area = (placement[1]..edge).map {|col| [placement[0], col]}
     end
       
-    area.all? {|pos| board[pos] == nil}
+    area.all? {|pos| board[pos] == :o}
   end
   
 end
